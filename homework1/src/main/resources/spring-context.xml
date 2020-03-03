@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="quizController" class="ru.otus.valeev.controller.QuizController">
+        <constructor-arg name="questionService" ref="questionService"/>
+        <constructor-arg name="consoleService" ref="consoleService"/>
+    </bean>
+
+    <bean id="answerDao" class="ru.otus.valeev.dao.impl.AnswerDaoImpl"/>
+    <bean id="questionDao" class="ru.otus.valeev.dao.impl.QuestionDaoImpl"/>
+
+    <bean id="questionService" class="ru.otus.valeev.service.impl.QuestionServiceImpl">
+        <constructor-arg name="fileParser" ref="fileParser"/>
+        <constructor-arg name="textToQuestion" ref="textToQuestion"/>
+    </bean>
+
+    <bean id="consoleService" class="ru.otus.valeev.service.impl.ConsoleServiceImpl"/>
+
+    <bean id="textToQuestion" class="ru.otus.valeev.util.csv.TextToQuestion"/>
+
+    <bean id="fileParser" class="ru.otus.valeev.service.impl.FileParserCVSImpl">
+        <constructor-arg name="fileName" value="question.csv"/>
+    </bean>
+
+</beans>
