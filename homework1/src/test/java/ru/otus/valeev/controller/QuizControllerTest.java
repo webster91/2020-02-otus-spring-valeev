@@ -50,7 +50,7 @@ class QuizControllerTest {
 
     @DisplayName("Проверка успешного выполнения сценария")
     @Test
-    void playQuiz2() {
+    void optimisticQuizWithoutThrows() {
         String name = "Ignat";
         List<Question> questions = Collections.singletonList(new Question("1 + 1", "2"));
         doNothing().when(consoleService).sendMessage(any());
