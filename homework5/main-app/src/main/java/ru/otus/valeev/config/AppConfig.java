@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Locale;
 
 @Configuration
-@EnableConfigurationProperties(YamlProps.class)
+@EnableConfigurationProperties(AppProps.class)
 public class AppConfig {
 
     @Bean
-    public Locale locale(final YamlProps props) {
+    public Locale locale(final AppProps props) {
         return Locale.forLanguageTag(props.getLocale());
     }
 }

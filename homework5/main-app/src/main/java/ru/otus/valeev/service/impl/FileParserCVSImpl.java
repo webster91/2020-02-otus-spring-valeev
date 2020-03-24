@@ -5,7 +5,7 @@ import com.opencsv.exceptions.CsvException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
-import ru.otus.valeev.config.YamlProps;
+import ru.otus.valeev.config.AppProps;
 import ru.otus.valeev.constants.BundleProperties;
 import ru.otus.valeev.service.FileParser;
 
@@ -20,7 +20,7 @@ import java.util.Locale;
 public class FileParserCVSImpl implements FileParser {
 
     private final Locale locale;
-    private final YamlProps props;
+    private final AppProps props;
     private final MessageSourceAccessor messageSource;
 
     @Override

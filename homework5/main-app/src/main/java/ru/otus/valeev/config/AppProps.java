@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application")
 @Getter
 @Setter
-public class YamlProps {
+public class AppProps {
 
     private String locale;
     private Integer correctAnswers;
