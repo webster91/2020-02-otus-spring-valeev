@@ -1,0 +1,12 @@
+application:
+  locale: en-US
+  correctAnswers: 1
+  baseNames:
+    fileName: i18n/quiz/question
+message:
+  defaultEncoding: UTF-8
+  baseNames: i18n/bundle
+spring:
+  shell:
+    interactive:
+      enabled: false
