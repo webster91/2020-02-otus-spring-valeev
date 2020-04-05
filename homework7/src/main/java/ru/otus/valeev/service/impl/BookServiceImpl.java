@@ -1,7 +1,7 @@
 package ru.otus.valeev.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.otus.valeev.dao.BookDao;
 import ru.otus.valeev.domain.Author;
@@ -9,16 +9,19 @@ import ru.otus.valeev.domain.Book;
 import ru.otus.valeev.domain.Genre;
 import ru.otus.valeev.service.AuthorService;
 import ru.otus.valeev.service.BookService;
+import ru.otus.valeev.service.ConsoleService;
 import ru.otus.valeev.service.GenreService;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class BookServiceImpl implements BookService {
     private final BookDao bookDao;
     private final AuthorService authorService;
     private final GenreService genreService;
+    private final ConsoleService consoleService;
 
     @Override
     public List<Book> getBooks() {
@@ -32,17 +35,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book saveBook(String bookName, String authorName, String genreName) {
-        if (StringUtils.isBlank(bookName) || StringUtils.isBlank(authorName) || StringUtils.isBlank(genreName)) {
-            throw new RuntimeException("Ошибка во входных данных при создании книги");
-        }
-
         Book book = bookDao.getBookByName(bookName);
         if (book != null) {
+            String message;
             if (authorName.equals(book.getAuthor().getName()) && genreName.equals(book.getGenre().getName())) {
-                throw new RuntimeException("Данная книга уже существует");
+                message = "Данная книга уже существует";
             } else {
-                throw new RuntimeException("Данная книга уже существует с другими парам.");
+                message = "Данная книга уже существует с другими парам";
             }
+            consoleService.sendMessage(message);
+            return null;
         }
 
         Author author = authorService.saveAuthorByName(authorName);
@@ -56,10 +58,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book updateBook(String bookName, String authorName, String genreName) {
-        if (StringUtils.isBlank(bookName) || StringUtils.isBlank(authorName) || StringUtils.isBlank(genreName)) {
-            throw new RuntimeException("Ошибка во входных данных при создании книги");
-        }
-
         Book book = bookDao.getBookByName(bookName);
         if (book == null) {
             return null;
@@ -76,9 +74,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public boolean deleteBook(String bookName) {
-        if (StringUtils.isBlank(bookName)) {
-            throw new RuntimeException("Ошибка во входных данных при удалении книги");
-        }
         return bookDao.deleteByName(bookName);
     }
 }

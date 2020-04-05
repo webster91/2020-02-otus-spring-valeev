@@ -57,7 +57,10 @@ public class GenreDaoJdbc implements GenreDao {
         public Genre mapRow(ResultSet resultSet, int i) throws SQLException {
             long id = resultSet.getLong("id");
             String name = resultSet.getString("name");
-            return new Genre(id, name);
+            return Genre.builder()
+                    .id(id)
+                    .name(name)
+                    .build();
         }
     }
 }
