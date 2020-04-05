@@ -1,7 +1,6 @@
 package ru.otus.valeev.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import ru.otus.valeev.dao.BookDao;
 import ru.otus.valeev.domain.Author;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class BookServiceImpl implements BookService {
     private final BookDao bookDao;
     private final AuthorService authorService;

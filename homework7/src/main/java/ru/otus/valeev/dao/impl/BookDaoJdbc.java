@@ -1,7 +1,6 @@
 package ru.otus.valeev.dao.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -21,7 +20,6 @@ import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
-@Log4j2
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
     private final AuthorDao authorDao;
