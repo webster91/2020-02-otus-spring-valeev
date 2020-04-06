@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import ru.otus.valeev.dao.AuthorDao;
 import ru.otus.valeev.domain.Author;
 
 import java.util.List;
@@ -21,7 +22,7 @@ class AuthorDaoJdbcTest {
     private static final Author DEFAULT_AUTHOR = new Author(2, "Игнат");
 
     @Autowired
-    private AuthorDaoJdbc authorDao;
+    private AuthorDao authorDao;
 
     @Test
     @DisplayName("Получение всех авторов")

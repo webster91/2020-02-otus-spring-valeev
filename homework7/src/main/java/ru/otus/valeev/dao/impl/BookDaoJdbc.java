@@ -7,10 +7,10 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.otus.valeev.dao.AuthorDao;
 import ru.otus.valeev.dao.BookDao;
-import ru.otus.valeev.dao.GenreDao;
+import ru.otus.valeev.domain.Author;
 import ru.otus.valeev.domain.Book;
+import ru.otus.valeev.domain.Genre;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,24 +22,36 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
 
     @Override
     public List<Book> getAllBooks() {
-        return jdbc.query("SELECT id, name, author_id, genre_id from books", new BookMapper());
+        return jdbc.query("SELECT b.id, b.name, b.author_id, b.genre_id, a.id, a.name, g.id, g.name " +
+                        "FROM books b " +
+                        "INNER JOIN authors a ON b.author_id = a.id " +
+                        "INNER JOIN genres g ON b.genre_id = g.id ",
+                new BookMapper());
     }
 
     @Override
     public Book getBookByName(String name) {
         Map<String, Object> params = Collections.singletonMap("name", name);
-        return DataAccessUtils.singleResult(jdbc.query("SELECT id, name, author_id, genre_id FROM books WHERE name = :name", params, new BookMapper()));
+        return DataAccessUtils.singleResult(jdbc.query("SELECT b.id, b.name, b.author_id, b.genre_id, a.id, a.name, g.id, g.name " +
+                        "FROM books b " +
+                        "INNER JOIN authors a ON b.author_id = a.id " +
+                        "INNER JOIN genres g ON b.genre_id = g.id " +
+                        "WHERE b.name = :name",
+                params, new BookMapper()));
     }
 
     @Override
     public Book getBookById(long id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
-        return DataAccessUtils.singleResult(jdbc.query("SELECT id, name, author_id, genre_id FROM books WHERE id = :id", params, new BookMapper()));
+        return DataAccessUtils.singleResult(jdbc.query("SELECT b.id, b.name, b.author_id, b.genre_id, a.id, a.name, g.id, g.name " +
+                        "FROM books b " +
+                        "INNER JOIN authors a ON b.author_id = a.id " +
+                        "INNER JOIN genres g ON b.genre_id = g.id " +
+                        "WHERE b.id = :id",
+                params, new BookMapper()));
     }
 
     @Override
@@ -73,19 +85,27 @@ public class BookDaoJdbc implements BookDao {
         }
     }
 
-    private class BookMapper implements RowMapper<Book> {
+    private static class BookMapper implements RowMapper<Book> {
 
         @Override
         public Book mapRow(ResultSet resultSet, int i) throws SQLException {
             long id = resultSet.getLong("id");
             String name = resultSet.getString("name");
             long authorId = resultSet.getLong("author_id");
+            String author_name = resultSet.getString("authors.name");
             long genreId = resultSet.getLong("genre_id");
+            String genre_name = resultSet.getString("genres.name");
             return Book.builder()
                     .id(id)
                     .name(name)
-                    .author(authorDao.getAuthorById(authorId))
-                    .genre(genreDao.getGenreById(genreId))
+                    .author(Author.builder()
+                            .id(authorId)
+                            .name(author_name)
+                            .build())
+                    .genre(Genre.builder()
+                            .id(genreId)
+                            .name(genre_name)
+                            .build())
                     .build();
         }
     }

@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import ru.otus.valeev.dao.GenreDao;
 import ru.otus.valeev.domain.Genre;
 
 import java.util.List;
@@ -21,7 +22,7 @@ class GenreDaoJdbcTest {
     private static final Genre DEFAULT_GENRE = new Genre(4, "Роман");
 
     @Autowired
-    private GenreDaoJdbc genreDao;
+    private GenreDao genreDao;
 
     @Test
     @DisplayName("Успешное получение жанра по ИД")
