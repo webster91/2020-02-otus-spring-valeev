@@ -36,7 +36,7 @@ public class CommentDaoJpa implements CommentDao {
     public List<Comment> getCommentsByBookId(long id) {
         TypedQuery<Comment> query = entityManager.createQuery("SELECT c " +
                         "FROM Comment c " +
-                        "WHERE c.book_id = :book_id",
+                        "WHERE c.bookId = :book_id",
                 Comment.class);
         query.setParameter("book_id", id);
         return query.getResultList();

@@ -60,7 +60,7 @@ class CommentDaoTest {
     @DisplayName("Добавление комментария")
     void shouldAddComment() {
         Comment commentTmp = Comment.builder()
-                .book_id(1L)
+                .bookId(1L)
                 .comment("Hello")
                 .build();
         Comment commentsExcepted = commentDao.addComment(commentTmp);

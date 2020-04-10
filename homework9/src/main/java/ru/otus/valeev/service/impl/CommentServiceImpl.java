@@ -46,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return commentDao.addComment(Comment.builder()
                 .comment(comment)
-                .book_id(book.getId())
+                .bookId(book.getId())
                 .build());
     }
 }
