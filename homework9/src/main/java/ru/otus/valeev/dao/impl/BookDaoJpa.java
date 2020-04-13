@@ -1,9 +1,7 @@
 package ru.otus.valeev.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.BookDao;
 import ru.otus.valeev.domain.Book;
 
@@ -17,12 +15,6 @@ import java.util.List;
 public class BookDaoJpa implements BookDao {
     @PersistenceContext
     private EntityManager entityManager;
-    private BookDaoJpa bookDaoJpa;
-
-    @Autowired
-    public void setBookDaoJpa(BookDaoJpa bookDaoJpa) {
-        this.bookDaoJpa = bookDaoJpa;
-    }
 
     @Override
     public List<Book> findAll() {
@@ -51,7 +43,6 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public Book save(Book book) {
         if (book.getId() > 0) {
             return entityManager.merge(book);
@@ -62,9 +53,8 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public Book deleteById(Long bookId) {
-        Book existing = bookDaoJpa.findById(bookId);
+        Book existing = this.findById(bookId);
         if (existing != null) {
             entityManager.remove(existing);
             return existing;
@@ -74,8 +64,10 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    @Transactional
     public Book delete(Book book) {
+        if (book == null) {
+            return null;
+        }
         return this.deleteById(book.getId());
     }
 }

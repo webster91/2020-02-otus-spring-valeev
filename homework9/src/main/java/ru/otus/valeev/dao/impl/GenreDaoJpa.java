@@ -2,7 +2,6 @@ package ru.otus.valeev.dao.impl;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.GenreDao;
 import ru.otus.valeev.domain.Genre;
 
@@ -35,7 +34,6 @@ public class GenreDaoJpa implements GenreDao {
     }
 
     @Override
-    @Transactional
     public Genre save(Genre genre) {
         if (genre.getId() > 0) {
             return entityManager.merge(genre);

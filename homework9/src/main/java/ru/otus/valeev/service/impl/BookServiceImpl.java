@@ -58,6 +58,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book update(String bookName, String authorName, String genreName) {
         Book book = bookDao.findByName(bookName);
         if (book == null) {
@@ -75,6 +76,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public Book deleteByName(String bookName) {
         Book book = bookDao.findByName(bookName);
         return bookDao.delete(book);

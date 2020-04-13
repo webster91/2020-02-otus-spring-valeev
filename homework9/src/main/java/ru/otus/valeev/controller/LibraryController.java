@@ -85,9 +85,10 @@ public class LibraryController {
     @ShellMethod(value = "Delete book", key = {"db", "deleteBook"})
     public void deleteBook(@ShellOption(defaultValue = "") String bookName) {
         String message;
-        if (StringUtils.isNotBlank(bookName)) {
+        if (StringUtils.isBlank(bookName)) {
             message = "Ошибка во входных данных при удалении книги";
             consoleService.sendMessage(message);
+            return;
         }
         Book book = bookService.deleteByName(bookName);
         if (book != null) {

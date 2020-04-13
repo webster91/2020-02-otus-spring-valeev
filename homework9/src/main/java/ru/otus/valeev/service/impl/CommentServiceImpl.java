@@ -2,6 +2,7 @@ package ru.otus.valeev.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.BookDao;
 import ru.otus.valeev.dao.CommentDao;
 import ru.otus.valeev.domain.Book;
@@ -22,15 +23,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public Comment deleteById(long commentId) {
         return commentDao.deleteById(commentId);
     }
 
     @Override
+    @Transactional
     public Comment save(String bookName, String comment) {
         Book book = bookDao.findByName(bookName);
         if (book == null) {
-            consoleService.sendMessage(String.format("Книги с названием  %s не найдена", bookName));
+            consoleService.sendMessage(String.format("Книга с названием  %s не найдена", bookName));
             return null;
         }
         return commentDao.save(Comment.builder()

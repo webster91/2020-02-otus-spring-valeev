@@ -2,7 +2,6 @@ package ru.otus.valeev.dao.impl;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.AuthorDao;
 import ru.otus.valeev.domain.Author;
 
@@ -35,7 +34,6 @@ public class AuthorDaoJpa implements AuthorDao {
     }
 
     @Override
-    @Transactional
     public Author save(Author author) {
         entityManager.persist(author);
         return author;
