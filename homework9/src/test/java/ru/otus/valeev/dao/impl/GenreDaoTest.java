@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("GenreDaoJdbc")
+@DisplayName("GenreDao")
 @DataJpaTest
 @Import(GenreDaoJpa.class)
 class GenreDaoTest {
@@ -32,14 +32,14 @@ class GenreDaoTest {
     @DisplayName("Успешное получение жанра по ИД")
     void shouldSaveGenreByName() {
         Genre genre = em.find(Genre.class, FIRST_GENRE_ID);
-        Genre genreExcepted = genreDao.getGenreByName(genre.getName());
+        Genre genreExcepted = genreDao.findByName(genre.getName());
         assertThat(genreExcepted).isEqualTo(genre);
     }
 
     @Test
     @DisplayName("Не успешное получение жанров по имени. Не существующиее имя")
     void doesntShouldSaveGenreByName() {
-        Genre genreExcepted = genreDao.getGenreByName("Horizon zero");
+        Genre genreExcepted = genreDao.findByName("Horizon zero");
         assertThat(genreExcepted).isNull();
     }
 
@@ -47,21 +47,21 @@ class GenreDaoTest {
     @DisplayName("Успешное получение жанров по ИД")
     void shouldGetGenreById() {
         Genre genre = em.find(Genre.class, FIRST_GENRE_ID);
-        Genre genreExcepted = genreDao.getGenreById(genre.getId());
+        Genre genreExcepted = genreDao.findById(genre.getId());
         assertThat(genre).isEqualTo(genreExcepted);
     }
 
     @Test
     @DisplayName("Не успешное получение жанров по ИД. Не существующий ИД")
     void doesntShouldGetGenreById() {
-        Genre genreExcepted = genreDao.getGenreById(54);
+        Genre genreExcepted = genreDao.findById(54);
         assertThat(genreExcepted).isNull();
     }
 
     @Test
     @DisplayName("Успешное получение всех жанров")
     void shouldGetAll() {
-        List<Genre> genres = genreDao.getAll();
+        List<Genre> genres = genreDao.findAll();
         assertThat(genres.size()).isEqualTo(EXPECTED_GENRE_COUNT);
     }
 

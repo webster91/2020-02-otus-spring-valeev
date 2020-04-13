@@ -9,8 +9,6 @@ import ru.otus.valeev.domain.Comment;
 import ru.otus.valeev.service.CommentService;
 import ru.otus.valeev.service.ConsoleService;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -19,32 +17,23 @@ public class CommentServiceImpl implements CommentService {
     private final ConsoleService consoleService;
 
     @Override
-    public Comment getById(long id) {
-        return commentDao.getCommentById(id);
+    public Comment findById(long id) {
+        return commentDao.findById(id);
     }
 
     @Override
-    public List<Comment> getByBookName(String bookName) {
-        Book book = bookDao.getBookByName(bookName);
-        if (book == null) {
-            return null;
-        }
-        return commentDao.getCommentsByBookId(book.getId());
+    public Comment deleteById(long commentId) {
+        return commentDao.deleteById(commentId);
     }
 
     @Override
-    public boolean deleteCommentById(long commentId) {
-        return commentDao.deleteCommentById(commentId);
-    }
-
-    @Override
-    public Comment addComment(String bookName, String comment) {
-        Book book = bookDao.getBookByName(bookName);
+    public Comment save(String bookName, String comment) {
+        Book book = bookDao.findByName(bookName);
         if (book == null) {
             consoleService.sendMessage(String.format("Книги с названием  %s не найдена", bookName));
             return null;
         }
-        return commentDao.addComment(Comment.builder()
+        return commentDao.save(Comment.builder()
                 .comment(comment)
                 .bookId(book.getId())
                 .build());

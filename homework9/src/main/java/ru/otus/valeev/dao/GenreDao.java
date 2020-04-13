@@ -5,11 +5,11 @@ import ru.otus.valeev.domain.Genre;
 import java.util.List;
 
 public interface GenreDao {
-    Genre getGenreByName(String name);
+    List<Genre> findAll();
 
-    Genre getGenreById(long id);
+    Genre findByName(String name);
 
-    List<Genre> getAll();
+    Genre findById(long id);
 
-    Genre saveGenreByName(String name);
+    Genre save(Genre name);
 }

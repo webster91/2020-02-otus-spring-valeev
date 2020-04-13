@@ -1,5 +1,6 @@
 package ru.otus.valeev.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,6 @@ import ru.otus.valeev.domain.Book;
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -17,9 +17,15 @@ import java.util.List;
 public class BookDaoJpa implements BookDao {
     @PersistenceContext
     private EntityManager entityManager;
+    private BookDaoJpa bookDaoJpa;
+
+    @Autowired
+    public void setBookDaoJpa(BookDaoJpa bookDaoJpa) {
+        this.bookDaoJpa = bookDaoJpa;
+    }
 
     @Override
-    public List<Book> getAllBooks() {
+    public List<Book> findAll() {
         EntityGraph<?> entityGraph = entityManager.getEntityGraph("vitaliy");
         TypedQuery<Book> query = entityManager.createQuery("SELECT b " +
                 "FROM Book b", Book.class);
@@ -28,7 +34,7 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    public Book getBookByName(String name) {
+    public Book findByName(String name) {
         EntityGraph<?> entityGraph = entityManager.getEntityGraph("vitaliy");
         TypedQuery<Book> query = entityManager.createQuery("SELECT b " +
                         "FROM Book b " +
@@ -40,13 +46,13 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    public Book getBookById(long id) {
+    public Book findById(long id) {
         return entityManager.find(Book.class, id);
     }
 
     @Override
     @Transactional
-    public Book saveBook(Book book) {
+    public Book save(Book book) {
         if (book.getId() > 0) {
             return entityManager.merge(book);
         } else {
@@ -57,16 +63,19 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     @Transactional
-    public Book updateBook(Book book) {
-        return entityManager.merge(book);
+    public Book deleteById(Long bookId) {
+        Book existing = bookDaoJpa.findById(bookId);
+        if (existing != null) {
+            entityManager.remove(existing);
+            return existing;
+        } else {
+            return null;
+        }
     }
 
     @Override
     @Transactional
-    public boolean deleteByName(String name) {
-        Query query = entityManager.createQuery("DELETE FROM Book b WHERE b.name = :name");
-        query.setParameter("name", name);
-        int rs = query.executeUpdate();
-        return rs == 1;
+    public Book delete(Book book) {
+        return this.deleteById(book.getId());
     }
 }

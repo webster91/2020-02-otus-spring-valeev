@@ -17,18 +17,18 @@ public class AuthorDaoJpa implements AuthorDao {
     private EntityManager entityManager;
 
     @Override
-    public List<Author> getAllAuthors() {
+    public List<Author> findAll() {
         TypedQuery<Author> query = entityManager.createQuery("SELECT a FROM Author a", Author.class);
         return query.getResultList();
     }
 
     @Override
-    public Author getAuthorById(long id) {
+    public Author findById(long id) {
         return entityManager.find(Author.class, id);
     }
 
     @Override
-    public Author getAuthorByName(String name) {
+    public Author findByName(String name) {
         TypedQuery<Author> query = entityManager.createQuery("SELECT a FROM Author a WHERE a.name = :name", Author.class);
         query.setParameter("name", name);
         return DataAccessUtils.singleResult(query.getResultList());
@@ -36,10 +36,7 @@ public class AuthorDaoJpa implements AuthorDao {
 
     @Override
     @Transactional
-    public Author saveAuthorByName(String name) {
-        Author author = Author.builder()
-                .name(name)
-                .build();
+    public Author save(Author author) {
         entityManager.persist(author);
         return author;
     }

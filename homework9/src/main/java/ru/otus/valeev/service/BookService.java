@@ -5,13 +5,13 @@ import ru.otus.valeev.domain.Book;
 import java.util.List;
 
 public interface BookService {
-    List<Book> getBooks();
+    List<Book> findAll();
 
-    Book getBookByName(String name);
+    Book findByName(String name);
 
-    Book saveBook(String bookName, String authorName, String genreName);
+    Book save(String bookName, String authorName, String genreName);
 
-    Book updateBook(String bookName, String authorName, String genreName);
+    Book update(String bookName, String authorName, String genreName);
 
-    boolean deleteBook(String name);
+    Book deleteByName(String name);
 }

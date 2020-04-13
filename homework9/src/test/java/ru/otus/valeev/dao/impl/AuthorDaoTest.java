@@ -32,7 +32,7 @@ class AuthorDaoTest {
     @Test
     @DisplayName("Получение всех авторов")
     void shouldGetAllAuthors() {
-        List<Author> authors = authorDao.getAllAuthors();
+        List<Author> authors = authorDao.findAll();
         assertThat(authors.size()).isEqualTo(EXPECTED_AUTHORS_COUNT);
     }
 
@@ -40,14 +40,14 @@ class AuthorDaoTest {
     @DisplayName("Успешное получение автора по ид")
     void shouldGetAuthorById() {
         Author author = em.find(Author.class, FIRST_AUTHOR_ID);
-        Author authorExcepted = authorDao.getAuthorById(FIRST_AUTHOR_ID);
+        Author authorExcepted = authorDao.findById(FIRST_AUTHOR_ID);
         assertThat(authorExcepted).isEqualTo(author);
     }
 
     @Test
     @DisplayName("Не успешное получение автора по ид. Ид 0")
     void doesntShouldGetAuthorById() {
-        Author author = authorDao.getAuthorById(0);
+        Author author = authorDao.findById(0);
         assertThat(author).isEqualTo(null);
     }
 
@@ -55,28 +55,28 @@ class AuthorDaoTest {
     @DisplayName("Успешное получение автора по имени")
     void shouldGetAuthorByName() {
         Author author = em.find(Author.class, FIRST_AUTHOR_ID);
-        Author authorExcepted = authorDao.getAuthorByName(author.getName());
+        Author authorExcepted = authorDao.findByName(author.getName());
         assertThat(authorExcepted).isEqualTo(author);
     }
 
     @Test
     @DisplayName("Не успешное получение автора по имени. Имя null")
     void doesntShouldGetAuthorByNameNull() {
-        Author authorExcepted = authorDao.getAuthorByName(null);
+        Author authorExcepted = authorDao.findByName(null);
         assertThat(authorExcepted).isEqualTo(null);
     }
 
     @Test
     @DisplayName("Не успешное получение автора по имени. Имя не известно")
     void doesntShouldGetAuthorByNameEmpty() {
-        Author authorExcepted = authorDao.getAuthorByName("Ignatik");
+        Author authorExcepted = authorDao.findByName("Ignatik");
         assertThat(authorExcepted).isEqualTo(null);
     }
 
     @Test
     @DisplayName("Успешное сохранение автора")
     void shouldSaveAuthorByName() {
-        Author authorExcepted = authorDao.saveAuthorByName("Vasya");
+        Author authorExcepted = authorDao.save(new Author(0, "Vasya"));
         val author = em.find(Author.class, authorExcepted.getId());
         assertThat(authorExcepted).isEqualTo(author);
     }

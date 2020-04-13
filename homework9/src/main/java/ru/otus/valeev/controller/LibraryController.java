@@ -7,6 +7,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import ru.otus.valeev.domain.Author;
 import ru.otus.valeev.domain.Book;
 import ru.otus.valeev.domain.Comment;
@@ -36,12 +37,22 @@ public class LibraryController {
 
     @ShellMethod(value = "Get all books", key = {"ab", "allBooks"})
     public List<Book> getBooks() {
-        return bookService.getBooks();
+        return bookService.findAll();
     }
 
     @ShellMethod(value = "Get all books", key = {"ag", "allGenres"})
     public List<Genre> getGenres() {
         return genreService.allGenres();
+    }
+
+    @ShellMethod(value = "Get all comments book", key = {"ac", "acb", "allCom"})
+    public List<Comment> allCommentsBook(@ShellOption(defaultValue = "") String bookName) {
+        Book book = bookService.findByName(bookName);
+        if (book == null || CollectionUtils.isEmpty(book.getComments())) {
+            consoleService.sendMessage(String.format("Комментарии для книги %s не найдены", bookName));
+            return null;
+        }
+        return book.getComments();
     }
 
     @ShellMethod(value = "Create/Save book", key = {"cb", "sb", "createBook", "saveBook"})
@@ -52,7 +63,7 @@ public class LibraryController {
             consoleService.sendMessage("Ошибка во входных данных при создании книги");
             return null;
         }
-        return bookService.saveBook(bookName, authorName, genreName);
+        return bookService.save(bookName, authorName, genreName);
     }
 
     @ShellMethod(value = "Update book", key = {"ub", "updateBook"})
@@ -63,7 +74,7 @@ public class LibraryController {
             consoleService.sendMessage("Ошибка во входных данных для изменении книги");
             return null;
         }
-        Book book = bookService.updateBook(bookName, authorName, genreName);
+        Book book = bookService.update(bookName, authorName, genreName);
         if (book != null) {
             return book.toString();
         } else {
@@ -74,12 +85,12 @@ public class LibraryController {
     @ShellMethod(value = "Delete book", key = {"db", "deleteBook"})
     public void deleteBook(@ShellOption(defaultValue = "") String bookName) {
         String message;
-        if (StringUtils.isBlank(bookName)) {
+        if (StringUtils.isNotBlank(bookName)) {
             message = "Ошибка во входных данных при удалении книги";
             consoleService.sendMessage(message);
-            return;
         }
-        if (bookService.deleteBook(bookName)) {
+        Book book = bookService.deleteByName(bookName);
+        if (book != null) {
             message = "Успешное удаление книги с названием: " + bookName;
         } else {
             message = "Ошибка при удаление книги с названием: " + bookName;
@@ -87,22 +98,16 @@ public class LibraryController {
         consoleService.sendMessage(message);
     }
 
-    @ShellMethod(value = "Get all comments book", key = {"acb", "allCom"})
-    public List<Comment> allCommentsBook(@ShellOption(defaultValue = "") String bookName) {
-        return commentService.getByBookName(bookName);
-    }
-
-
-    @ShellMethod(value = "Add comment for book", key = {"ac", "addCom"})
-    public Comment addComment(@ShellOption(defaultValue = "") String bookName,
-                              @ShellOption(defaultValue = "") String comment) {
+    @ShellMethod(value = "Add comment for book", key = {"sc", "addCom", "saveCom"})
+    public Comment saveComment(@ShellOption(defaultValue = "") String bookName,
+                               @ShellOption(defaultValue = "") String comment) {
         String message;
         if (StringUtils.isBlank(bookName) || StringUtils.isBlank(comment)) {
             message = "Ошибка во входных данных при добавлении коментария";
             consoleService.sendMessage(message);
             return null;
         }
-        return commentService.addComment(bookName, comment);
+        return commentService.save(bookName, comment);
     }
 
     @ShellMethod(value = "Delete comment", key = {"dc", "delCom"})
@@ -113,7 +118,7 @@ public class LibraryController {
             consoleService.sendMessage(message);
             return;
         }
-        if (commentService.deleteCommentById(NumberUtils.toLong(commentId))) {
+        if (commentService.deleteById(NumberUtils.toLong(commentId)) != null) {
             message = "Успешное удаление коментария с ид: " + commentId;
         } else {
             message = "Ошибка при удаление коментария с ид: " + commentId;

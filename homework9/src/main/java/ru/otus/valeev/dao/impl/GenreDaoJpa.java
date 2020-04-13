@@ -17,31 +17,31 @@ public class GenreDaoJpa implements GenreDao {
     private EntityManager entityManager;
 
     @Override
-    public Genre getGenreByName(String name) {
+    public Genre findByName(String name) {
         TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g WHERE g.name = :name", Genre.class);
         query.setParameter("name", name);
         return DataAccessUtils.singleResult(query.getResultList());
     }
 
     @Override
-    public Genre getGenreById(long id) {
-        TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g WHERE g.id = :id", Genre.class);
-        query.setParameter("id", id);
-        return DataAccessUtils.singleResult(query.getResultList());
+    public Genre findById(long id) {
+        return entityManager.find(Genre.class, id);
     }
 
     @Override
-    public List<Genre> getAll() {
+    public List<Genre> findAll() {
         TypedQuery<Genre> query = entityManager.createQuery("SELECT g FROM Genre g", Genre.class);
         return query.getResultList();
     }
 
     @Override
     @Transactional
-    public Genre saveGenreByName(String name) {
-        return entityManager.merge(
-                Genre.builder()
-                        .name(name)
-                        .build());
+    public Genre save(Genre genre) {
+        if (genre.getId() > 0) {
+            return entityManager.merge(genre);
+        } else {
+            entityManager.persist(genre);
+            return genre;
+        }
     }
 }

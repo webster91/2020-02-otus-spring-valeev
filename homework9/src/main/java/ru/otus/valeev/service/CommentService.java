@@ -2,14 +2,10 @@ package ru.otus.valeev.service;
 
 import ru.otus.valeev.domain.Comment;
 
-import java.util.List;
-
 public interface CommentService {
-    Comment getById(long id);
+    Comment findById(long id);
 
-    List<Comment> getByBookName(String bookName);
+    Comment deleteById(long id);
 
-    boolean deleteCommentById(long id);
-
-    Comment addComment(String bookName, String comment);
+    Comment save(String bookName, String comment);
 }

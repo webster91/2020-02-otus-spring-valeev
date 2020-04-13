@@ -15,19 +15,21 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre getGenreByName(String bookName) {
-        return genreDao.getGenreByName(bookName);
+        return genreDao.findByName(bookName);
     }
 
     @Override
     public List<Genre> allGenres() {
-        return genreDao.getAll();
+        return genreDao.findAll();
     }
 
     @Override
     public Genre saveGenreByName(String genreName) {
-        Genre genre = genreDao.getGenreByName(genreName);
+        Genre genre = genreDao.findByName(genreName);
         if (genre == null) {
-            genre = genreDao.saveGenreByName(genreName);
+            genre = genreDao.save(Genre.builder()
+                    .name(genreName)
+                    .build());
         }
         return genre;
     }

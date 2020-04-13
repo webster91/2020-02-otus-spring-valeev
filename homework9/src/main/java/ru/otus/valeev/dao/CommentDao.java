@@ -2,14 +2,10 @@ package ru.otus.valeev.dao;
 
 import ru.otus.valeev.domain.Comment;
 
-import java.util.List;
-
 public interface CommentDao {
-    Comment getCommentById(long id);
+    Comment findById(long id);
 
-    Comment addComment(Comment comment);
+    Comment save(Comment comment);
 
-    List<Comment> getCommentsByBookId(long bookId);
-
-    boolean deleteCommentById(long bookId);
+    Comment deleteById(long bookId);
 }

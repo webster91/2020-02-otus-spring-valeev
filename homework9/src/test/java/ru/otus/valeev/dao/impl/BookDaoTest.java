@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("PersonDao")
+@DisplayName("BookDao")
 @DataJpaTest
 @Import(BookDaoJpa.class)
 class BookDaoTest {
@@ -33,7 +33,7 @@ class BookDaoTest {
     @Test
     @DisplayName("Успешное получение всех книг")
     void shouldGetAllBooks() {
-        List<Book> books = bookDao.getAllBooks();
+        List<Book> books = bookDao.findAll();
         assertThat(books.size()).isEqualTo(EXPECTED_BOOK_COUNT);
     }
 
@@ -41,14 +41,14 @@ class BookDaoTest {
     @DisplayName("Успешное получение книги по имени")
     void shouldGetBookByName() {
         Book book = em.find(Book.class, FIRST_BOOK_ID);
-        Book exceptedBook = bookDao.getBookByName(book.getName());
+        Book exceptedBook = bookDao.findByName(book.getName());
         assertThat(exceptedBook).isEqualTo(book);
     }
 
     @Test
     @DisplayName("Ошибочное получение книги по имени. Не существующее имя книги")
     void doesntShouldGetBookByName() {
-        Book exceptedBook = bookDao.getBookByName("Как я встретил вашу маму");
+        Book exceptedBook = bookDao.findByName("Как я встретил вашу маму");
         assertThat(exceptedBook).isNull();
     }
 
@@ -56,14 +56,14 @@ class BookDaoTest {
     @DisplayName("Успешное получение книги по ид")
     void shouldGetBookById() {
         Book book = em.find(Book.class, FIRST_BOOK_ID);
-        Book exceptedBook = bookDao.getBookById(book.getId());
+        Book exceptedBook = bookDao.findById(book.getId());
         assertThat(exceptedBook).isEqualTo(book);
     }
 
     @Test
     @DisplayName("Ошибочное получение книги по ид. Не существующий ид книги")
     void doesntShouldGetBookById() {
-        Book exceptedBook = bookDao.getBookById(45);
+        Book exceptedBook = bookDao.findById(45);
         assertThat(exceptedBook).isNull();
     }
 
@@ -79,7 +79,7 @@ class BookDaoTest {
                         .name("War")
                         .build())
                 .build();
-        Book exceptedBook = bookDao.saveBook(book);
+        Book exceptedBook = bookDao.save(book);
         Book savedBook = em.find(Book.class, exceptedBook.getId());
         assertThat(exceptedBook).isEqualTo(savedBook);
     }
@@ -89,7 +89,7 @@ class BookDaoTest {
     void shouldUpdateBook() {
         Book book = em.find(Book.class, FIRST_BOOK_ID);
         book.setAuthor(new Author(7, "Igor"));
-        Book updatedBook = bookDao.updateBook(book);
+        Book updatedBook = bookDao.save(book);
 
         assertThat(book).isEqualTo(updatedBook);
     }
@@ -98,27 +98,25 @@ class BookDaoTest {
     @DisplayName("Успешное удаление книги")
     void shouldDeleteByName() {
         Book book = em.find(Book.class, FIRST_BOOK_ID);
-        boolean rs = bookDao.deleteByName(book.getName());
-        em.detach(book);
+        Book rs = bookDao.delete(book);
 
         Book deletedBook = em.find(Book.class, FIRST_BOOK_ID);
-        assertThat(rs).isEqualTo(true);
+        assertThat(rs).isEqualTo(book);
         assertThat(deletedBook).isNull();
     }
 
     @Test
-    @DisplayName("Ошибочное удаление книги. Имя книги не существует")
+    @DisplayName("Ошибочное удаление книги. Ид книги не существует")
     void doesntShouldDeleteByName() {
-        String bookName = "doesntShouldDeleteByName";
-        boolean rs = bookDao.deleteByName(bookName);
-        assertThat(rs).isFalse();
+        Book rs = bookDao.delete(new Book(48, null, null, null, null));
+        assertThat(rs).isNull();
     }
 
     @Test
-    @DisplayName("Ошибочное удаление книги. Имя книги null")
+    @DisplayName("Ошибочное удаление книги. Ид книги null")
     void doesntShouldDeleteByNameNull() {
-        boolean rs = bookDao.deleteByName(null);
-        assertThat(rs).isFalse();
+        Book rs = bookDao.delete(new Book(0, null, null, null, null));
+        assertThat(rs).isNull();
     }
 
     @TestConfiguration

@@ -5,15 +5,15 @@ import ru.otus.valeev.domain.Book;
 import java.util.List;
 
 public interface BookDao {
-    List<Book> getAllBooks();
+    List<Book> findAll();
 
-    Book getBookByName(String name);
+    Book findByName(String name);
 
-    Book getBookById(long name);
+    Book findById(long name);
 
-    Book saveBook(Book book);
+    Book save(Book book);
 
-    Book updateBook(Book book);
+    Book deleteById(Long bookId);
 
-    boolean deleteByName(String name);
+    Book delete(Book book);
 }

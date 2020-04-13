@@ -24,19 +24,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public List<Book> getBooks() {
-        return bookDao.getAllBooks();
+    public List<Book> findAll() {
+        return bookDao.findAll();
     }
 
     @Override
-    public Book getBookByName(String name) {
-        return bookDao.getBookByName(name);
+    public Book findByName(String name) {
+        return bookDao.findByName(name);
     }
 
     @Override
     @Transactional
-    public Book saveBook(String bookName, String authorName, String genreName) {
-        Book book = bookDao.getBookByName(bookName);
+    public Book save(String bookName, String authorName, String genreName) {
+        Book book = bookDao.findByName(bookName);
         if (book != null) {
             String message;
             if (authorName.equals(book.getAuthor().getName()) && genreName.equals(book.getGenre().getName())) {
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
 
         Author author = authorService.saveAuthorByName(authorName);
         Genre genre = genreService.saveGenreByName(genreName);
-        return bookDao.saveBook(Book.builder()
+        return bookDao.save(Book.builder()
                 .author(author)
                 .genre(genre)
                 .name(bookName)
@@ -58,14 +58,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book updateBook(String bookName, String authorName, String genreName) {
-        Book book = bookDao.getBookByName(bookName);
+    public Book update(String bookName, String authorName, String genreName) {
+        Book book = bookDao.findByName(bookName);
         if (book == null) {
             return null;
         } else {
             Author author = authorService.saveAuthorByName(authorName);
             Genre genre = genreService.saveGenreByName(genreName);
-            return bookDao.updateBook(Book.builder()
+            return bookDao.save(Book.builder()
                     .id(book.getId())
                     .author(author)
                     .genre(genre)
@@ -75,7 +75,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public boolean deleteBook(String bookName) {
-        return bookDao.deleteByName(bookName);
+    public Book deleteByName(String bookName) {
+        Book book = bookDao.findByName(bookName);
+        return bookDao.delete(book);
     }
 }

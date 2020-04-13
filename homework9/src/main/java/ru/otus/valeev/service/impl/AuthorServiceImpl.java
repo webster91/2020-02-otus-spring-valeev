@@ -15,24 +15,26 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> allAuthors() {
-        return authorDao.getAllAuthors();
+        return authorDao.findAll();
     }
 
     @Override
     public Author getAuthorByName(String name) {
-        return authorDao.getAuthorByName(name);
+        return authorDao.findByName(name);
     }
 
     @Override
     public Author getAuthorById(Long id) {
-        return authorDao.getAuthorById(id);
+        return authorDao.findById(id);
     }
 
     @Override
     public Author saveAuthorByName(String name) {
-        Author author = authorDao.getAuthorByName(name);
+        Author author = authorDao.findByName(name);
         if (author == null) {
-            author = authorDao.saveAuthorByName(name);
+            author = authorDao.save(Author.builder()
+                    .name(name)
+                    .build());
         }
         return author;
     }

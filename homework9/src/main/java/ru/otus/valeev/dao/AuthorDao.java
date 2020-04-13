@@ -5,11 +5,11 @@ import ru.otus.valeev.domain.Author;
 import java.util.List;
 
 public interface AuthorDao {
-    List<Author> getAllAuthors();
+    List<Author> findAll();
 
-    Author getAuthorById(long id);
+    Author findById(long id);
 
-    Author getAuthorByName(String name);
+    Author findByName(String name);
 
-    Author saveAuthorByName(String name);
+    Author save(Author author);
 }
