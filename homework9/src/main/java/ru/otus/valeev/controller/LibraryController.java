@@ -111,6 +111,17 @@ public class LibraryController {
         return commentService.save(bookName, comment);
     }
 
+    @ShellMethod(value = "Find comments by book", key = {"fc", "findCom"})
+    public List<Comment> findComment(@ShellOption(defaultValue = "") String bookName) {
+        Book book = bookService.findByName(bookName);
+        if (book == null || CollectionUtils.isEmpty(book.getComments())) {
+            consoleService.sendMessage("Не найдены комментарии у книги : " + bookName);
+            return null;
+        } else {
+            return book.getComments();
+        }
+    }
+
     @ShellMethod(value = "Delete comment", key = {"dc", "delCom"})
     public void deleteComment(@ShellOption(defaultValue = "") String commentId) {
         String message;

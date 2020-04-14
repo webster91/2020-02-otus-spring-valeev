@@ -23,7 +23,6 @@ public class BookServiceImpl implements BookService {
     private final ConsoleService consoleService;
 
     @Override
-    @Transactional
     public List<Book> findAll() {
         return bookDao.findAll();
     }

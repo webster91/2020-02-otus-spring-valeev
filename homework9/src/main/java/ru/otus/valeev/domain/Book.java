@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,10 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "Books")
-@NamedEntityGraph(name = "vitaliy", attributeNodes = {
-        @NamedAttributeNode("author"),
-        @NamedAttributeNode("genre"),
-        @NamedAttributeNode("comments")
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "vitaliy", attributeNodes = {
+                @NamedAttributeNode("author"),
+                @NamedAttributeNode("genre")
+        }),
+        @NamedEntityGraph(name = "allJoins", attributeNodes = {
+                @NamedAttributeNode("author"),
+                @NamedAttributeNode("genre"),
+                @NamedAttributeNode("comments")
+        })
 })
 public class Book {
     @Id
@@ -37,5 +44,6 @@ public class Book {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
+    @ToString.Exclude
     private List<Comment> comments;
 }
