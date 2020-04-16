@@ -113,12 +113,12 @@ public class LibraryController {
 
     @ShellMethod(value = "Find comments by book", key = {"fc", "findCom"})
     public List<Comment> findComment(@ShellOption(defaultValue = "") String bookName) {
-        Book book = bookService.findByName(bookName);
-        if (book == null || CollectionUtils.isEmpty(book.getComments())) {
+        List<Comment> comments = commentService.findCommentsByBookName(bookName);
+        if (comments == null || CollectionUtils.isEmpty(comments)) {
             consoleService.sendMessage("Не найдены комментарии у книги : " + bookName);
             return null;
         } else {
-            return book.getComments();
+            return comments;
         }
     }
 

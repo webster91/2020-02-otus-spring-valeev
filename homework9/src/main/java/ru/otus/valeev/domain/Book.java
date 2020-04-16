@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,16 +16,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "Books")
-@NamedEntityGraphs({
-        @NamedEntityGraph(name = "vitaliy", attributeNodes = {
-                @NamedAttributeNode("author"),
-                @NamedAttributeNode("genre")
-        }),
-        @NamedEntityGraph(name = "allJoins", attributeNodes = {
-                @NamedAttributeNode("author"),
-                @NamedAttributeNode("genre"),
-                @NamedAttributeNode("comments")
-        })
+@NamedEntityGraph(name = "vitaliy", attributeNodes = {
+        @NamedAttributeNode("author"),
+        @NamedAttributeNode("genre")
 })
 public class Book {
     @Id
@@ -42,8 +36,7 @@ public class Book {
     @JoinColumn(name = "genre_id")
     private Genre genre;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 }

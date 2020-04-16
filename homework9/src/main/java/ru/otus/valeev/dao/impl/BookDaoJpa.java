@@ -27,7 +27,7 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     public Book findByName(String name) {
-        EntityGraph<?> entityGraph = entityManager.getEntityGraph("allJoins");
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("vitaliy");
         TypedQuery<Book> query = entityManager.createQuery("SELECT b " +
                         "FROM Book b " +
                         "WHERE b.name = :name",
