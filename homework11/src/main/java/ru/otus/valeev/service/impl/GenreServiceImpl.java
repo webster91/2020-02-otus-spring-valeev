@@ -15,11 +15,6 @@ public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
     @Override
-    public Genre getGenreByName(String bookName) {
-        return genreDao.findByName(bookName);
-    }
-
-    @Override
     public List<Genre> allGenres() {
         return genreDao.findAll();
     }

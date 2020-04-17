@@ -94,7 +94,7 @@ class BookDaoTest {
     @DisplayName("Успешное удаление книги")
     void shouldDeleteByName() {
         Book book = em.find(Book.class, FIRST_BOOK_ID);
-        bookDao.deleteByName(book.getName());
+        bookDao.deleteById(book.getId());
 
         Book deletedBook = em.find(Book.class, FIRST_BOOK_ID);
 

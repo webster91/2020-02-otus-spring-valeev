@@ -20,16 +20,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getAuthorByName(String name) {
-        return authorDao.findByName(name);
-    }
-
-    @Override
-    public Author getAuthorById(Long id) {
-        return authorDao.findById(id).orElse(null);
-    }
-
-    @Override
     @Transactional
     public Author saveAuthorByName(String name) {
         Author author = authorDao.findByName(name);

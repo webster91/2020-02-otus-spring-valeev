@@ -10,8 +10,6 @@ public interface BookDao extends JpaRepository<Book, Long> {
     @EntityGraph(value = "vitaliy")
     List<Book> findAll();
 
-    @EntityGraph(value = "allJoins")
+    @EntityGraph(value = "vitaliy")
     Book findByName(String name);
-
-    Long deleteByName(String name);
 }

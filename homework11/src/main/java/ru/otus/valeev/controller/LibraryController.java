@@ -2,7 +2,6 @@ package ru.otus.valeev.controller;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
@@ -45,24 +44,10 @@ public class LibraryController {
         return genreService.allGenres();
     }
 
-    @ShellMethod(value = "Get all comments book", key = {"ac", "acb", "allCom"})
-    public List<Comment> allCommentsBook(@ShellOption(defaultValue = "") String bookName) {
-        if (StringUtils.isBlank(bookName)) {
-            consoleService.sendMessage("Ошибка во входных данных при запросе комментарий");
-            return null;
-        }
-        Book book = bookService.findByName(bookName);
-        if (book == null || CollectionUtils.isEmpty(book.getComments())) {
-            consoleService.sendMessage(String.format("Комментарии для книги %s не найдены", bookName));
-            return null;
-        }
-        return book.getComments();
-    }
-
     @ShellMethod(value = "Create/Save book", key = {"cb", "sb", "createBook", "saveBook"})
-    public Book saveBook(@ShellOption(defaultValue = "") String bookName,
-                         @ShellOption(defaultValue = "") String authorName,
-                         @ShellOption(defaultValue = "") String genreName) {
+    public Book saveBook(@ShellOption() String bookName,
+                         @ShellOption() String authorName,
+                         @ShellOption() String genreName) {
         if (StringUtils.isBlank(bookName) || StringUtils.isBlank(authorName) || StringUtils.isBlank(genreName)) {
             consoleService.sendMessage("Ошибка во входных данных при создании книги");
             return null;
@@ -71,74 +56,76 @@ public class LibraryController {
     }
 
     @ShellMethod(value = "Update book", key = {"ub", "updateBook"})
-    public String updateBook(@ShellOption(defaultValue = "") String bookName,
-                             @ShellOption(defaultValue = "") String authorName,
-                             @ShellOption(defaultValue = "") String genreName) {
-        if (StringUtils.isBlank(bookName) || StringUtils.isBlank(authorName) || StringUtils.isBlank(genreName)) {
+    public String updateBook(@ShellOption() long bookId,
+                             @ShellOption() String authorName,
+                             @ShellOption() String genreName) {
+        if (bookId < 1 || StringUtils.isBlank(authorName) || StringUtils.isBlank(genreName)) {
             consoleService.sendMessage("Ошибка во входных данных для изменении книги");
             return null;
         }
-        Book book = bookService.update(bookName, authorName, genreName);
+        Book book = bookService.update(bookId, authorName, genreName);
         if (book != null) {
             return book.toString();
         } else {
-            return "Ошибка при изменение книги с названием: " + bookName;
+            return "Ошибка при изменение книги с ид: " + bookId;
         }
     }
 
     @ShellMethod(value = "Delete book", key = {"db", "deleteBook"})
-    public void deleteBook(@ShellOption(defaultValue = "") String bookName) {
+    public void deleteBook(@ShellOption() long bookId) {
         String message;
-        if (StringUtils.isBlank(bookName)) {
-            message = "Ошибка во входных данных при удалении книги";
+        if (bookId < 1) {
+            message = "Ошибка во входных данных для удаления книги";
             consoleService.sendMessage(message);
             return;
         }
-        if (bookService.deleteByName(bookName) == 1L) {
-            message = "Успешное удаление книги с названием: " + bookName;
+        if (bookService.deleteById(bookId)) {
+            message = "Успешное удаление книги с ид: " + bookId;
         } else {
-            message = "Ошибка при удаление книги с названием: " + bookName;
+            message = "Ошибка при удаление книги с ид: " + bookId;
         }
         consoleService.sendMessage(message);
     }
 
     @ShellMethod(value = "Add comment for book", key = {"sc", "addCom", "saveCom"})
-    public Comment saveComment(@ShellOption(defaultValue = "") String bookName,
-                               @ShellOption(defaultValue = "") String comment) {
+    public Comment saveComment(@ShellOption() long bookId,
+                               @ShellOption() String comment) {
         String message;
-        if (StringUtils.isBlank(bookName) || StringUtils.isBlank(comment)) {
+        if (bookId < 1 || StringUtils.isBlank(comment)) {
             message = "Ошибка во входных данных при добавлении коментария";
             consoleService.sendMessage(message);
             return null;
         }
-        return commentService.save(bookName, comment);
+        return commentService.save(bookId, comment);
     }
 
     @ShellMethod(value = "Find comments by book", key = {"fc", "findCom"})
-    public List<Comment> findComment(@ShellOption(defaultValue = "") String bookName) {
-        Book book = bookService.findByName(bookName);
-        if (book == null || CollectionUtils.isEmpty(book.getComments())) {
-            consoleService.sendMessage("Не найдены комментарии у книги : " + bookName);
+    public List<Comment> findCommentByBookId(@ShellOption() long bookId) {
+        if (bookId < 1) {
+            consoleService.sendMessage("Ошибка во входных данных при поиске коментария");
+            return null;
+        }
+        List<Comment> comments = bookService.findCommentsByBookId(bookId);
+        if (comments == null || CollectionUtils.isEmpty(comments)) {
+            consoleService.sendMessage("Не найдены комментарии у книги с ид: " + bookId);
             return null;
         } else {
-            return book.getComments();
+            return comments;
         }
     }
 
     @ShellMethod(value = "Delete comment", key = {"dc", "delCom"})
-    public void deleteComment(@ShellOption(defaultValue = "") String commentNumber) {
+    public void deleteComment(@ShellOption() long commentId) {
         String message;
-        long commentId = NumberUtils.toLong(commentNumber);
-        if (StringUtils.isBlank(commentNumber) || commentId == 0) {
-            message = "Ошибка во входных данных при добавлении коментария";
+        if (commentId < 1) {
+            message = "Ошибка во входных данных при удалении коментария";
             consoleService.sendMessage(message);
             return;
         }
-
         if (commentService.deleteById(commentId)) {
             message = "Успешное удаление коментария с ид: " + commentId;
         } else {
-            message = "Ошибка при удаление коментария с ид: " + commentNumber;
+            message = "Ошибка при удаление коментария с ид: " + commentId;
         }
         consoleService.sendMessage(message);
     }

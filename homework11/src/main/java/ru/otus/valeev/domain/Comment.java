@@ -8,9 +8,12 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Data
@@ -27,7 +30,8 @@ public class Comment {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "book_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
     @ToString.Exclude
-    private long bookId;
+    private Book book;
 }
