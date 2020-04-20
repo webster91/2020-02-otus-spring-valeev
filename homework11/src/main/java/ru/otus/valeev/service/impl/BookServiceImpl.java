@@ -56,10 +56,8 @@ public class BookServiceImpl implements BookService {
         if (book == null) {
             return null;
         } else {
-            Author author = authorService.saveAuthorByName(authorName);
-            book.setAuthor(author);
-            Genre genre = genreService.saveGenreByName(genreName);
-            book.setGenre(genre);
+            book.setAuthor(authorService.saveAuthorByName(authorName));
+            book.setGenre(genreService.saveGenreByName(genreName));
             return bookDao.save(book);
         }
     }
@@ -75,14 +73,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Comment> findCommentsByBookId(Long bookId) {
-        Book byName = bookDao.findById(bookId).orElse(null);
-        if (byName == null) {
+        Book book = bookDao.findById(bookId).orElse(null);
+        if (book == null) {
             return null;
         } else {
-            Hibernate.initialize(byName.getComments());
-            return byName.getComments();
+            Hibernate.initialize(book.getComments());
+            return book.getComments();
         }
     }
 }

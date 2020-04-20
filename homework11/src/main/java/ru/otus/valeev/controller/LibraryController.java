@@ -106,7 +106,7 @@ public class LibraryController {
             return null;
         }
         List<Comment> comments = bookService.findCommentsByBookId(bookId);
-        if (comments == null || CollectionUtils.isEmpty(comments)) {
+        if (CollectionUtils.isEmpty(comments)) {
             consoleService.sendMessage("Не найдены комментарии у книги с ид: " + bookId);
             return null;
         } else {
