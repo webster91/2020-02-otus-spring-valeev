@@ -44,9 +44,6 @@ public class CommentServiceImpl implements CommentService {
             consoleService.sendMessage(String.format("Книга с ид  %s не найдена", bookId));
             return null;
         }
-        return commentDao.save(Comment.builder()
-                .text(text)
-                .book(book)
-                .build());
+        return commentDao.save(new Comment(text, book));
     }
 }

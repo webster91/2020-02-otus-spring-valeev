@@ -1,7 +1,5 @@
 package ru.otus.valeev.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,8 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = Comment.COLLECTION_NAME)
 public class Comment {
@@ -24,8 +20,12 @@ public class Comment {
     private String id;
     @Field
     private String text;
-
     @DBRef
     @ToString.Exclude
     private Book book;
+
+    public Comment(String text, Book book) {
+        this.text = text;
+        this.book = book;
+    }
 }

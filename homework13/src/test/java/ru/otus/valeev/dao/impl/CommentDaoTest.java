@@ -50,7 +50,7 @@ class CommentDaoTest {
         Book book = mongoTemplate.findAll(Book.class).stream()
                 .findFirst()
                 .orElseThrow();
-        commentDao.save(new Comment(null, "Comment", book));
+        commentDao.save(new Comment("Comment", book));
         commentDao.deleteById(book.getId());
         Book bookExcepted = mongoTemplate.findById(book.getId(), Book.class);
         assertThat(bookExcepted).isNotNull()

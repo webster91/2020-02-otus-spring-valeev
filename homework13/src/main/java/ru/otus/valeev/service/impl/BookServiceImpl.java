@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.BookDao;
+import ru.otus.valeev.domain.Author;
 import ru.otus.valeev.domain.Book;
 import ru.otus.valeev.domain.Comment;
+import ru.otus.valeev.domain.Genre;
 import ru.otus.valeev.service.AuthorService;
 import ru.otus.valeev.service.BookService;
 import ru.otus.valeev.service.GenreService;
@@ -37,11 +39,9 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public Book save(String bookName, String authorName, String genreName) {
-        return bookDao.save(Book.builder()
-                .author(authorService.saveAuthorByName(authorName))
-                .genre(genreService.saveGenreByName(genreName))
-                .name(bookName)
-                .build());
+        Author author = authorService.saveAuthorByName(authorName);
+        Genre genre = genreService.saveGenreByName(genreName);
+        return bookDao.save(new Book(bookName, author, genre));
     }
 
     @Override

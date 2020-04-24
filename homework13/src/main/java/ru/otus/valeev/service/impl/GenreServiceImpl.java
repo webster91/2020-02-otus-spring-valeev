@@ -24,9 +24,7 @@ public class GenreServiceImpl implements GenreService {
     public Genre saveGenreByName(String genreName) {
         Genre genre = genreDao.findByName(genreName);
         if (genre == null) {
-            genre = genreDao.save(Genre.builder()
-                    .name(genreName)
-                    .build());
+            genre = genreDao.save(new Genre(genreName));
         }
         return genre;
     }

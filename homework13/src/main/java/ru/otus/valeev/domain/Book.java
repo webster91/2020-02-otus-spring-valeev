@@ -1,7 +1,5 @@
 package ru.otus.valeev.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,13 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = Book.COLLECTION_NAME)
 public class Book {
 
     public static final String COLLECTION_NAME = "books";
+
     @Id
     private String id;
     @Field

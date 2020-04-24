@@ -24,9 +24,7 @@ public class AuthorServiceImpl implements AuthorService {
     public Author saveAuthorByName(String name) {
         Author author = authorDao.findByName(name);
         if (author == null) {
-            author = authorDao.save(Author.builder()
-                    .name(name)
-                    .build());
+            author = authorDao.save(new Author(name));
         }
         return author;
     }
