@@ -1,9 +1,13 @@
 spring:
   datasource:
-  url: jdbc:mysql://localhost/test
-  username: dbuser
-  password: dbpassword
-  driver-class-name: com.mysql.jdbc.Driver
-  initialization-mode: always
-  schema: schema.sql
-  data: data.sql
+    url: jdbc:h2:mem:testdb
+    initialization-mode: always
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+    hibernate:
+      ddl-auto: none
+logging:
+  level:
+    ROOT: INFO

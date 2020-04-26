@@ -1,17 +1,22 @@
 package ru.otus.valeev.service;
 
 import ru.otus.valeev.domain.Book;
+import ru.otus.valeev.domain.Comment;
 
 import java.util.List;
 
 public interface BookService {
-    List<Book> getBooks();
+    List<Book> findAll();
 
-    Book getBookByName(String name);
+    Book findByName(String name);
 
-    Book saveBook(String bookName, String authorName, String genreName);
+    Book findById(Long id);
 
-    Book updateBook(String bookName, String authorName, String genreName);
+    Book save(String bookName, String authorName, String genreName);
 
-    boolean deleteBook(String name);
+    Book update(Long bookId, String authorName, String genreName);
+
+    boolean deleteById(Long bookId);
+
+    List<Comment> findCommentsByBookId(Long bookId);
 }

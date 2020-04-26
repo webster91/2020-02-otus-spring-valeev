@@ -1,15 +1,8 @@
 package ru.otus.valeev.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.valeev.domain.Author;
 
-import java.util.List;
-
-public interface AuthorDao {
-    List<Author> getAllAuthors();
-
-    Author getAuthorById(long id);
-
-    Author getAuthorByName(String name);
-
-    Author saveAuthorByName(String name);
+public interface AuthorDao extends JpaRepository<Author, Long> {
+    Author findByName(String name);
 }

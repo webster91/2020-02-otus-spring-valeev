@@ -2,7 +2,6 @@ package ru.otus.valeev.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.AuthorDao;
 import ru.otus.valeev.domain.Author;
 import ru.otus.valeev.service.AuthorService;
@@ -16,17 +15,24 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> allAuthors() {
-        return authorDao.findAll();
+        return authorDao.getAllAuthors();
     }
 
     @Override
-    @Transactional
+    public Author getAuthorByName(String name) {
+        return authorDao.getAuthorByName(name);
+    }
+
+    @Override
+    public Author getAuthorById(Long id) {
+        return authorDao.getAuthorById(id);
+    }
+
+    @Override
     public Author saveAuthorByName(String name) {
-        Author author = authorDao.findByName(name);
+        Author author = authorDao.getAuthorByName(name);
         if (author == null) {
-            author = authorDao.save(Author.builder()
-                    .name(name)
-                    .build());
+            author = authorDao.saveAuthorByName(name);
         }
         return author;
     }

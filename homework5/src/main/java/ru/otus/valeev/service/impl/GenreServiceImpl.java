@@ -2,7 +2,6 @@ package ru.otus.valeev.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.valeev.dao.GenreDao;
 import ru.otus.valeev.domain.Genre;
 import ru.otus.valeev.service.GenreService;
@@ -15,18 +14,20 @@ public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
     @Override
-    public List<Genre> allGenres() {
-        return genreDao.findAll();
+    public Genre getGenreByName(String bookName) {
+        return genreDao.getGenreByName(bookName);
     }
 
     @Override
-    @Transactional
+    public List<Genre> allGenres() {
+        return genreDao.getAll();
+    }
+
+    @Override
     public Genre saveGenreByName(String genreName) {
-        Genre genre = genreDao.findByName(genreName);
+        Genre genre = genreDao.getGenreByName(genreName);
         if (genre == null) {
-            genre = genreDao.save(Genre.builder()
-                    .name(genreName)
-                    .build());
+            genre = genreDao.saveGenreByName(genreName);
         }
         return genre;
     }

@@ -7,12 +7,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
+        <version>2.2.6.RELEASE</version>
     </parent>
 
     <groupId>ru.otus.valeev</groupId>
-    <artifactId>homework-5</artifactId>
-    <name>Homework 5</name>
+    <artifactId>homework-6</artifactId>
+    <name>Homework 6</name>
     <version>1.0</version>
 
     <properties>
@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
