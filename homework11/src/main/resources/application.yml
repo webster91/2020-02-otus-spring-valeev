@@ -1,0 +1,16 @@
+spring:
+  resources:
+    chain:
+      strategy:
+        content:
+          paths: /**
+  data:
+    mongodb:
+      database: simpletestdb
+      uri: mongodb://localhost:27017
+logging:
+  level:
+    ROOT: INFO
+
+    spring:
+
