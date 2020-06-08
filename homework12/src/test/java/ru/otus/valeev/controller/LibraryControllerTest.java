@@ -69,7 +69,7 @@ class LibraryControllerTest {
 
     @Test
     @DisplayName("Сохранение книги")
-    void createBook() throws Exception {
+    void shouldCreateBook() throws Exception {
         bookDto.setId(null);
         mvc.perform(post("/api/book")
                 .content(asJsonString(bookDto))
@@ -80,7 +80,7 @@ class LibraryControllerTest {
 
     @Test
     @DisplayName("Получение книги")
-    void getBook() throws Exception {
+    void shouldGetBook() throws Exception {
         Book book = bookDao.findAll().stream()
                 .findFirst()
                 .orElseThrow();
@@ -94,7 +94,7 @@ class LibraryControllerTest {
 
     @Test
     @DisplayName("Обновление книги")
-    void updateBook() throws Exception {
+    void shouldUpdateBook() throws Exception {
         String bookName = "Best of the best";
         bookDto.setName(bookName);
 
@@ -107,7 +107,7 @@ class LibraryControllerTest {
 
     @Test
     @DisplayName("Удаление книги")
-    void deleteBook() throws Exception {
+    void shouldDeleteBook() throws Exception {
         String id = bookDto.getId();
         mvc.perform(delete("/api/book/{bookId}", id)
                 .content(asJsonString(bookDto))
