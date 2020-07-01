@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      database: simpletestdb
+      port: 27017
+      host: localhost
+  shell:
+    interactive:
+      enabled: false
+logging:
+  level:
+    ROOT: INFO
