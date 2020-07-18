@@ -1,0 +1,22 @@
+spring:
+  data:
+    mongodb:
+      database: simpletestdb
+      port: 27017
+      host: localhost
+logging:
+  level:
+    ROOT: INFO
+  file:
+    name: library.log
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
