@@ -1,0 +1,7 @@
+.bookContainer {
+    margin: 50px;
+    flex: auto;
+    width: 80%;
+    min-width: 800px;
+    overflow-wrap: break-word;
+}
