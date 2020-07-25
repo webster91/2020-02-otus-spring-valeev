@@ -15,7 +15,10 @@ public class PredictionServiceImpl implements PredictionService {
         if (rnd) {
             return "Стоит прочитать";
         } else {
-            return "Не стоит тратить время на эту книгу";
+            if (random.nextBoolean()) {
+                return "Не стоит тратить время на эту книгу";
+            }
+            throw new RuntimeException("Ванга устала и пока не обслуживает клиентов");
         }
     }
 }
