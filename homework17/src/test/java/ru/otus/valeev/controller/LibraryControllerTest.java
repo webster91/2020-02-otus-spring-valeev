@@ -10,9 +10,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.valeev.Main;
+import ru.otus.valeev.config.TestConfig;
 import ru.otus.valeev.dao.BookDao;
 import ru.otus.valeev.domain.Book;
 import ru.otus.valeev.dto.BookDto;
@@ -28,12 +30,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.MOCK,
-        classes = Main.class)
+        classes = {Main.class, TestConfig.class})
 @WithMockUser(
         username = "admin",
         authorities = {"ADMIN"}
 )
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class LibraryControllerTest {
     private BookDto bookDto;
 
@@ -61,10 +64,11 @@ class LibraryControllerTest {
     @Test
     @DisplayName("Получение всех книг")
     void shouldGetAllBooks() throws Exception {
+        int bookCount = bookDao.findAll().size();
         mvc.perform(get("/api/book")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(bookCount)));
     }
 
     @Test

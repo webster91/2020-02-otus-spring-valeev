@@ -1,9 +1,9 @@
 spring:
   data:
     mongodb:
-      database: simpletestdb
-      port: 27017
-      host: localhost
+      database: ${DB_NAME}
+      port: ${DB_PORT}
+      host: ${DB_HOST}
 logging:
   level:
     ROOT: INFO
