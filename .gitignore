@@ -27,9 +27,7 @@ hs_err_pid*
 *.iml
 
 target/
-homework10/node
-homework10/node_modules
-homework11/node
-homework11/node_modules
-homework12/node
-homework12/node_modules
+**/node
+**/node_modules
+
+package-lock.json

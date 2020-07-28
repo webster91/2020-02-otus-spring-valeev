@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: simpletestdb
+logging:
+  level:
+    ROOT: INFO
