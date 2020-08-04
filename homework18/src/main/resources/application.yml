@@ -1,0 +1,22 @@
+spring:
+  data:
+    mongodb:
+      database: ${DB_NAME}
+      port: ${DB_PORT}
+      host: ${DB_HOST}
+logging:
+  level:
+    ROOT: INFO
+  file:
+    name: library.log
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true

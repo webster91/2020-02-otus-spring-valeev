@@ -17,6 +17,7 @@
 *.ear
 *.zip
 *.tar.gz
+*.gz
 *.rar
 *.lnk
 
