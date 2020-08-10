@@ -20,8 +20,8 @@ FROM openjdk:11
 ENV PROJECT_DIR=/opt/project
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
-COPY --from=0 $PROJECT_DIR/target/homework-17-1.0.jar $PROJECT_DIR/
+COPY --from=0 $PROJECT_DIR/target/homework-18-1.0.jar $PROJECT_DIR/
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/opt/project/homework-17-1.0.jar"]
+ENTRYPOINT ["java", "-jar", "/opt/project/homework-18-1.0.jar"]
